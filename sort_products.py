@@ -1,14 +1,13 @@
 import csv
-from operator import itemgetter
+from operator import itemgetter, attrgetter
+import collections
 import argparse
 
-
-class SortProducts:
+class SortProducts():
     def __init__(self):
         self.products_ = []
 
-    @staticmethod
-    def read_csv():
+    def read_csv(self):
         products_file = open('products.csv', 'r')
         reader = csv.reader(products_file, delimiter=',')
         next(reader)
@@ -34,17 +33,24 @@ class SortProducts:
             self.products_.append(list(enumerate(item)))
         if self.products_:
             print(self.products_[1])
-
+            
 
 if __name__ == '__main__':
     run = SortProducts()
-    parser = argparse.ArgumentParser(description='Sorting script')
-    parser.add_argument('-p', '--p', action='store_false')
-    args = parser.parse_args()
     run.read_csv()
     run.sort_by_asc_amount()
     run.sort_by_prod_col_amount_asc()
     run.sort_by_prod_col_amount_desc()
 
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--products_file', type=argparse.FileType('r', encoding='UTF-8'),
+                        required=True)
+    args = parser.parse_args()
+    print(args)
+    args.products_file.close()
+# parser = argparse.ArgumentParser()
+# parser.add_argument('products_file', type=argparse.FileType('r'))
+# args = parser.parse_args(["products_file", "products.csv"])
+# print(type(args.products_file))
+# print("~ File: {}".format(args.products_file))
 
